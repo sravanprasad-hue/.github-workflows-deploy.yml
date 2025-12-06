@@ -17,5 +17,5 @@ jobs:
         AWS_S3_BUCKET: ${{ secrets.amzn-s3-webhosting  }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AKIAW3ZO7G4HUULKVMWS }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.268cGWoHPRBdkR7UpWlyYyW5pSxUjaqy4ouDGCcY }}
-        AWS_REGION: 'ap-south-2'   # optional: defaults to us-east-1
-        SOURCE_DIR: 'public'      # optional: defaults to entire repository
+        AWS_REGION: 'ap-south-2'
+        SOURCE_DIR: 'public'     
