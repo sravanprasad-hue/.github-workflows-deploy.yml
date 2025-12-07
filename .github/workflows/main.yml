@@ -1,26 +1,40 @@
-
 name: Deploy Static Website to S3
- 
+
 on:
   push:
     branches:
-      - main
- 
+      - main   # Deployment happens when you push to main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
- 
+
     steps:
+      # Step 1: Checkout your GitHub repo code
       - name: Checkout Code
-        uses: actions/checkout@v4
- 
+        uses: actions/checkout@v3
+
+      # Step 2: Configure AWS credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
- 
-      - name: Sync Website to S3
-        run: |
-          aws s3 sync "cafe-menu-main (2)/cafe-menu-main" s3://${{ secrets.AWS_BUCKET_NAME }} --delete
+          aws-region: ap-south-2     # Your region (Hyderabad)
+
+      # Step 3: Sync your website files to S3
+      - name: Sync Files to S3
+        run: aws s3 sync . s3://YOUR_BUCKET_NAME --delete
+
+      # (Optional) Step 4: Make sure index.html is Public
+      - name: Set S3 Public Access
+        run: aws s3api put-bucket-policy --bucket YOUR_BUCKET_NAME --policy "{
+          \"Version\": \"2012-10-17\",
+          \"Statement\": [{
+            \"Sid\": \"PublicReadGetObject\",
+            \"Effect\": \"Allow\",
+            \"Principal\": \"*\",
+            \"Action\": \"s3:GetObject\",
+            \"Resource\": \"arn:aws:s3:::YOUR_BUCKET_NAME/*\"
+          }]
+        }"
